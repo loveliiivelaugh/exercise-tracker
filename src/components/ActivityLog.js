@@ -26,20 +26,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { useAuth } from '../util/auth';
 import { useRouter } from '../util/router';
 import { updateActivity, deleteActivity, useActivitiesByOwner } from '../util/db';
-
-// Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
-}
-
-const rows = [
-  createData(0, '16 Mar, 2019', 'Elvis Presley', 'Tupelo, MS', 'VISA ⠀•••• 3719', 312.44),
-  createData(1, '16 Mar, 2019', 'Paul McCartney', 'London, UK', 'VISA ⠀•••• 2574', 866.99),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-  createData(3, '16 Mar, 2019', 'Michael Jackson', 'Gary, IN', 'AMEX ⠀•••• 2000', 654.39),
-  createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79),
-];
-
+//components
+import EditActivityModal from "./EditActivityModal";
 
 
 function preventDefault(event) {
@@ -62,14 +50,14 @@ export default function ActivitiyLog(props) {
   const month = new Date().getMonth();
   const date = new Date().getDate();
   const {
-    data: activitiesData,
+    data: activities,
     status: activitiesStatus,
     error: activitiesError
   } = useActivitiesByOwner(auth.user.uid);
 
   const [updatingActivityId, setUpdatingActivityId] = React.useState(null);
   
-  const activitiesAreEmpty = !activitiesData || activitiesData.length === 0;
+  const activitiesAreEmpty = !activities || activities.length === 0;
 
   const canUseStar =
     auth.user.planIsActive &&
@@ -83,19 +71,22 @@ export default function ActivitiyLog(props) {
     }
   };
 
+  console.info(activities)
   return (
     <React.Fragment>
-      <Title>Activities on {(month + 1) + " - " + date}</Title>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Type</TableCell>
-            <TableCell align="right">Duration</TableCell>
-          </TableRow>
-        </TableHead>
-
       <Paper className={classes.paperItems}>
+        <Title>Activities on {(month + 1) + " - " + date}</Title>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Type</TableCell>
+              <TableCell>Duration</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+        </Table>
+
         {(activitiesStatus === "loading" || activitiesAreEmpty) && (
           <Box py={5} px={3} align="center">
             {activitiesStatus === "loading" && <CircularProgress size={32} />}
@@ -106,17 +97,19 @@ export default function ActivitiyLog(props) {
           </Box>
         )}
 
-        {activitiesStatus !== "loading" && activitiesData && activitiesData.length > 0 && (
+        {activitiesStatus !== "loading" && activities && activities.length > 0 && (
           <List disablePadding={true}>
-            {activitiesData
+            {activities
               .filter(activity => activity.date === new Date(props.date).getDate())
               .map((activity, index) => (
                 <ListItem
-                  key={index}
-                  divider={index !== activitiesData.length - 1}
+                  key={activity.id}
+                  divider={index !== activities.length - 1}
                   className={classes.featured && classes.featured}
                 >
                   <ListItemText>{activity.name}</ListItemText>
+                  <ListItemText>{activity.type}</ListItemText>
+                  <ListItemText>{activity.duration}</ListItemText>
                   <ListItemSecondaryAction>
                     <IconButton
                       edge="end"
@@ -145,25 +138,24 @@ export default function ActivitiyLog(props) {
             ))}
           </List>
         )}
-      </Paper>
 
-        <TableBody>
-          {activitiesData ? activitiesData.map((activity) => (
-            <TableRow key={activity.id}>
-              <TableCell>{activity.name}</TableCell>
-              <TableCell>{activity.type}</TableCell>
-              <TableCell>{activity.duration}</TableCell>
-            </TableRow>
-          )) : "No activities added yet."}
-        </TableBody>
-      </Table>
-      {activitiesData && ( activitiesData.length > 5 ) &&
-        <div className={classes.seeMore}>
-          <Link color="primary" href="#" onClick={preventDefault}>
-            See more Activities
-          </Link>
-        </div>
-      }
+        {activities && ( activities.length > 5 ) &&
+          <div className={classes.seeMore}>
+            <Link color="primary" href="#" onClick={preventDefault}>
+              See more Activities
+            </Link>
+          </div>
+        }
+
+        {updatingActivityId && (
+          <EditActivityModal
+            id={updatingActivityId}
+            date={props.date}
+            onDone={() => setUpdatingActivityId(null)}
+          />
+        )}
+
+      </Paper>
     </React.Fragment>
   );
 }

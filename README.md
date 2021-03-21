@@ -1,6 +1,6 @@
 # Exercise Tracker App
 
-### React - [Firebase](https://firebase.google.com/products/auth) - [Material UI](https://material-ui.com)
+### [React](https://reactjs.org/) - [Firebase](https://firebase.google.com/products/auth) - [Material UI](https://material-ui.com)
 
 ## Summary
 
@@ -14,10 +14,17 @@ Live site coming soon!
 
 --->
 
+## Inspiration
+
+Check out this blog (includes a tutorial, live link, and repo) -->
+https://dev.to/sanderdebr/let-s-build-workout-tracker-with-react-and-firebase-part-1-1hng
+
+*I didn't follow the tutorial, so I am not sure the similarities in the code but I just found this project by doing a simple search for the concept I was looking for. I found this one I liked and did my best to build one that looks and functions similarly. Fortunately using MaterialUI makes making it look similar quite easy.*
+
 ## 📚 Extra's
 
 <p>
-  This project and "getting started docs" were created using <a href="https://divjoy.com?ref=readme_other">Divjoy</a>, the React codebase generator. You can find more info in the <a href="https://docs.divjoy.com">Divjoy Docs</a>.
+  This project was started, and the following "getting started docs" were created using <a href="https://divjoy.com?ref=readme_other">Divjoy</a>, the React codebase generator. You can find more info in the <a href="https://docs.divjoy.com">Divjoy Docs</a>.
 </p>
 
 ## 👉 Get Started

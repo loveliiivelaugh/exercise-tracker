@@ -190,7 +190,7 @@ export default function Dashboard() {
             {/* Recent Activity Log */}
             <Grid item xs={12} md={7} lg={7}>
               <Paper className={classes.paper}>
-                <ActivityLog />
+                <ActivityLog date={date} />
               </Paper>
             </Grid>
             {/* Chart */}

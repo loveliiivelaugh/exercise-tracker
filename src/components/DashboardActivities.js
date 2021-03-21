@@ -6,17 +6,13 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import IconButton from "@material-ui/core/IconButton";
-import StarIcon from "@material-ui/icons/Star";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditActivityModal from "./EditActivityModal";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from '@material-ui/core/MenuItem';
+import Slider from '@material-ui/core/Slider';
 import { useAuth } from "../util/auth.js";
-import { updateActivity, deleteActivity, useActivitiesByOwner } from "../util/db.js";
+import { useForm } from "react-hook-form";
+import { createActivity, updateActivity, deleteActivity, useActivitiesByOwner } from "../util/db.js";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +57,73 @@ function DashboardActivities(props) {
     }
   };
 
+  const date = new Date(props.date).getDate();
+  const [pending, setPending] = useState(false);
+  const [formAlert, setFormAlert] = useState(null);
+  const [type, setType] = React.useState('Weight Lifting');
+
+  const handleChange = (event) => {
+    setType(event.target.value);
+  };
+
+  const { register, handleSubmit, errors } = useForm();
+
+  // This will fetch activity if props.id is defined
+  // Otherwise query does nothing and we assume
+  // we are creating a new activity.
+
+  // If we are updating an existing activity
+  // don't show modal until activity data is fetched.
+  if (props.id && activitiesStatus !== "success") {
+    return null;
+  }
+
+  const onSubmit = (data) => {
+    setPending(true);
+
+    const query = props.id
+      ? updateActivity(props.id, data)
+      : createActivity({ owner: auth.user.id, date: date, ...data });
+
+    query
+      .then(() => {
+        // Let parent know we're done so they can hide modal
+        props.onDone();
+      })
+      .catch((error) => {
+        // Hide pending indicator
+        setPending(false);
+        // Show error alert message
+        setFormAlert({
+          type: "error",
+          message: error.message,
+        });
+      });
+  };
+
+  const types = [
+    {
+      value: 'Weight Lifting'
+    },
+    {
+      value: 'Cardio'
+    },
+    {
+      value: 'Walking'
+    },
+    {
+      value: 'Running'
+    },
+    {
+      value: 'Biking'
+    },
+  ];
+
+  function valuetext(value) {
+    return value;
+  }
+
+
   return (
     <>
       {activitiesError && (
@@ -82,77 +145,81 @@ function DashboardActivities(props) {
               {( new Date().getMonth() + 1 ) + " - " + new Date(props.date).getDate() }
             </center>
           </Typography>
-          <Button
-            variant="contained"
-            size="medium"
-            color="primary"
-            onClick={() => setCreatingActivity(true)}
-          >
-            Add Activity
-          </Button>
         </Box>
         <Divider />
-
-        {(activitiesStatus === "loading" || activitiesAreEmpty) && (
-          <Box py={5} px={3} align="center">
-            {activitiesStatus === "loading" && <CircularProgress size={32} />}
-
-            {activitiesStatus !== "loading" && activitiesAreEmpty && (
-              <>Nothing yet. Click the button to add your first item.</>
-            )}
-          </Box>
-        )}
-
-        {activitiesStatus !== "loading" && activities && activities.length > 0 && (
-          <List disablePadding={true}>
-            {activities
-              .filter(activity => activity.date === new Date(props.date).getDate())
-              .map((activity, index) => (
-                <ListItem
-                  key={index}
-                  divider={index !== activities.length - 1}
-                  className={classes.featured && classes.featured}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container={true} spacing={3}>
+            <Grid item={true} xs={12}>
+              <TextField
+                variant="outlined"
+                type="text"
+                label="Activity Name"
+                name="name"
+                defaultValue={activities && activities.name}
+                error={errors.name ? true : false}
+                helperText={errors.name && errors.name.message}
+                fullWidth={true}
+                autoFocus={true}
+                inputRef={register({
+                  required: "Please enter a name",
+                })}
+              />
+              <Grid item={true} xs={12}>
+                <TextField
+                  select
+                  label="Type"
+                  fullWidth={true}
+                  defaultValue={types[0].value}
+                  value={type}
+                  name={type}
+                  onChange={handleChange}
+                  error={errors.name ? true : false}
+                helperText={errors.name && errors.name.message}
+                  inputRef={register}
                 >
-                  <ListItemText>{activity.name}</ListItemText>
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      edge="end"
-                      aria-label="star"
-                      onClick={() => handleStarItem(activity)}
-                      className={activity.featured && classes.starFeatured}
-                    >
-                      <StarIcon />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      aria-label="update"
-                      onClick={() => setUpdatingActivityId(activity.id)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => deleteActivity(activity.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-            ))}
-          </List>
-        )}
+                  {types.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.value}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item={true} xs={12}>
+                <Typography gutterBottom>
+                  Duration
+                </Typography>
+                <Slider
+                  defaultValue={0.00000005}
+                  getAriaValueText={valuetext}
+                  aria-labelledby="discrete-slider-small-steps"
+                  step={0.00000001}
+                  marks
+                  min={-0.00000005}
+                  max={0.0000001}
+                  valueLabelDisplay="auto"
+                  fullWidth={true}
+                  error={errors.name ? true : false}
+                  helperText={errors.name && errors.name.message}
+                  inputRef={register}
+                />
+              </Grid>
+            </Grid>
+            <Grid item={true} xs={12} justify="center" alignItems="center">
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                type="submit"
+                disabled={pending}
+              >
+                {!pending && <span>Add Activity</span>}
+
+                {pending && <CircularProgress size={28} />}
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
       </Paper>
-
-      {creatingActivity && <EditActivityModal date={props.date} onDone={() => setCreatingActivity(false)} />}
-
-      {updatingActivityId && (
-        <EditActivityModal
-          id={updatingActivityId}
-          date={props.date}
-          onDone={() => setUpdatingActivityId(null)}
-        />
-      )}
     </>
   );
 }
