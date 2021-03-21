@@ -10,9 +10,13 @@ A small React app to track exercise activity. Features user authentication and r
 
 Deploys with Netlify.
 
-Live site coming soon!
+[![Netlify Status](https://api.netlify.com/api/v1/badges/c7d9fc3b-a06a-4420-8b75-ae3830c18c7e/deploy-status)](https://app.netlify.com/sites/fire-react-exercise-tracker/deploys)
 
---->
+~~Live site coming soon!~~
+
+[Live Site](https://fire-react-exercise-tracker.netlify.app)
+
+---> https://fire-react-exercise-tracker.netlify.app
 
 ## Inspiration
 
@@ -20,6 +24,12 @@ Check out this blog (includes a tutorial, live link, and repo) -->
 https://dev.to/sanderdebr/let-s-build-workout-tracker-with-react-and-firebase-part-1-1hng
 
 *I didn't follow the tutorial, so I am not sure the similarities in the code but I just found this project by doing a simple search for the concept I was looking for. I found this one I liked and did my best to build one that looks and functions similarly. Fortunately using MaterialUI makes making it look similar quite easy.*
+
+## To do's
+
+1. 
+2. 
+3. 
 
 ## 📚 Extra's
 
