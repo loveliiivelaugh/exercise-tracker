@@ -1,6 +1,6 @@
 # Exercise Tracker App
 
-### React * Firebase * MaterialUI
+### React - Firebase - MaterialUI
 
 ## Summary
 
