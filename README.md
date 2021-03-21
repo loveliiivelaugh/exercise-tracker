@@ -14,6 +14,11 @@ Live site coming soon!
 
 --->
 
+## 📚 Extra's
+
+<p>
+  This project and "getting started docs" were created using <a href="https://divjoy.com?ref=readme_other">Divjoy</a>, the React codebase generator. You can find more info in the <a href="https://docs.divjoy.com">Divjoy Docs</a>.
+</p>
 
 ## 👉 Get Started
 Install dependencies
@@ -42,8 +47,6 @@ This project uses the following libraries and services:
 
 
 ## 📚 Guide
-
-
 
 <details>
 <summary><b>Routing</b></summary>
