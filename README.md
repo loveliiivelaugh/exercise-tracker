@@ -1,6 +1,6 @@
 # Exercise Tracker App
 
-### React - Firebase - MaterialUI
+### React - [Firebase](https://firebase.google.com/products/auth) - [Material UI](https://material-ui.com)
 
 ## Summary
 
