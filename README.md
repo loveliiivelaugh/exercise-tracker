@@ -1,3 +1,19 @@
+# Exercise Tracker App
+
+### React * Firebase * MaterialUI
+
+## Summary
+
+A small React app to track exercise activity. Features user authentication and real time database to store daily activity data. Includes a chart to visualize activity data.
+
+## Deployment
+
+Deploys with Netlify.
+
+Live site coming soon!
+
+--->
+
 
 ## 👉 Get Started
 Install dependencies

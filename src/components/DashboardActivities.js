@@ -61,7 +61,6 @@ function DashboardActivities(props) {
     }
   };
 
-  console.info(auth.user.uid, activities, activitiesError)
   return (
     <>
       {activitiesError && (
