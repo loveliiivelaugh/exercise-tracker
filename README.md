@@ -6,6 +6,8 @@
 
 A small React app to track exercise activity. Features user authentication and real time database storage to store daily activity data. Includes a chart to be used for data visualization.
 
+
+![ExerciseTrackerApp](/public/screenshot.png)
 ## Deployment
 
 Deploys with Netlify.
@@ -14,7 +16,7 @@ Deploys with Netlify.
 
 ~~Live site coming soon!~~
 
-[Live Site](https://fire-react-exercise-tracker.netlify.app)
+[Fire React Exercise Tracker](https://fire-react-exercise-tracker.netlify.app)
 
 ---> https://fire-react-exercise-tracker.netlify.app
 
