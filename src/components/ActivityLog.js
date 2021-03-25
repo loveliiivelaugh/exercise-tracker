@@ -57,7 +57,7 @@ export default function ActivitiyLog(props) {
 
   const [updatingActivityId, setUpdatingActivityId] = React.useState(null);
   
-  const activitiesAreEmpty = !activities || activities.length === 0;
+  const activitiesAreEmpty = !activities || activities.date !== date || activities.length === 0;
 
   const canUseStar =
     auth.user.planIsActive &&
@@ -71,7 +71,8 @@ export default function ActivitiyLog(props) {
     }
   };
 
-  console.info(activities)
+  // if (activities) { console.info(activities, activitiesAreEmpty, activities[0].date, date) }
+  
   return (
     <React.Fragment>
       <Paper className={classes.paperItems}>
